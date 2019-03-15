@@ -1,7 +1,7 @@
 # majidai
 A simple web framework for nodejs
 
-[![npm](https://img.shields.io/node/v/majidai.svg)](https://www.npmjs.com/package/majidai) 
+[![npm](https://img.shields.io/npm/v/majidai.svg)](https://www.npmjs.com/package/majidai) 
 [![GitHub license](https://img.shields.io/github/license/dakc/majidai.svg?style=popout)](https://github.com/dakc/majidai/blob/master/LICENSE) 
 
 
