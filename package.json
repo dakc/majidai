@@ -1,0 +1,21 @@
+{
+  "name": "majidai",
+  "version": "1.0.0",
+  "description": "A simple web framework for nodejs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dakc/majidai.git"
+  },
+  "keywords": ["web server", "nodejs web framework"],
+  "author": "dakc<dakc@outlook.jp>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dakc/majidai/issues"
+  },
+  "homepage": "https://github.com/dakc/majidai#readme"
+}

@@ -1,0 +1,7 @@
+log
+.vscode
+node_modules
+.npmignore
+server.js
+webpack.config.js
+public/
