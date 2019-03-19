@@ -1,6 +1,6 @@
 {
   "name": "majidai",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A simple web framework for nodejs",
   "main": "index.js",
   "scripts": {
@@ -11,11 +11,17 @@
     "type": "git",
     "url": "git+https://github.com/dakc/majidai.git"
   },
-  "keywords": ["web server", "nodejs web framework"],
+  "keywords": [
+    "web server",
+    "nodejs web framework"
+  ],
   "author": "dakc<dakc@outlook.jp>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/dakc/majidai/issues"
   },
-  "homepage": "https://github.com/dakc/majidai#readme"
+  "homepage": "https://github.com/dakc/majidai#readme",
+  "dependencies": {
+    "merodb": "^1.0.6"
+  }
 }

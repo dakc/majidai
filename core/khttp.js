@@ -211,17 +211,17 @@ class Khttp {
             kApp.setHeader(this.config.header);
 
             httpReq = httpResp = null;
-            logger.access(JSON.stringify(kApp.logSuffix()));
+            logger.access(kApp.logSuffix());
 
             // on error event 
             kApp.request.on("error", (err) => {
-                logger.error(JSON.stringify(kApp.logSuffix()) + "\n" + "http request error" + "\n" + err.message);
+                logger.error(kApp.logSuffix(), `【Request Error】,${err.message}`);
                 kApp.respondErr(500);
                 kApp = null;
                 return;
             });
             kApp.response.on("error", (err) => {
-                logger.error(JSON.stringify(kApp.logSuffix()) + "\n" + "http response error" + "\n" + err.message);
+                logger.error(kApp.logSuffix(), `【Response Error】,${err.message}`);
                 return kApp.respondErr(500);
             });
 
@@ -252,11 +252,13 @@ class Khttp {
             }
         } catch (error) {
             // do nothing
+            // console.error(error);
         }
 
         // make methods accessible from user
         let createUserMethods = function () {
             if (logger.isWrite) {
+                // todo make simple for user purpose
                 Object.defineProperty(kApp, "logger", {
                     value: logger
                 });
@@ -303,7 +305,7 @@ class Khttp {
             // send not found
             if (!this.getRouting.has(kApp.homePath()) &&
                 !this.postRouting.has(kApp.homePath())) {
-                logger.error(JSON.stringify(kApp.logSuffix()) + "\n" + "Not Found");
+                logger.error(kApp.logSuffix(), "Not Found");
                 kApp.respondErr(404);
             }
 
@@ -383,7 +385,7 @@ class Khttp {
             }
         } catch (err) {
             // send internal server error
-            logger.error(JSON.stringify(kApp.logSuffix()) + "\n" + err.message);
+            logger.error(kApp.logSuffix(), err.message);
             return kApp.respondErr(500);
         }
 

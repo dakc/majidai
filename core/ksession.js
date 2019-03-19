@@ -1,4 +1,4 @@
-const MERO_DB = require("./merodb.min");
+const MERO_DB = require("merodb");
 const CRYPTO = require("crypto");
 
 // @NOTE

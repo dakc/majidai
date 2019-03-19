@@ -57,20 +57,31 @@ class Klog {
         }    
     }
 
-    error(content) {
+    error(obj, content = "") {
         if (!this.isError) return true;
+        if (typeof obj !== "object") return;
+        if (content) obj["msg"] = content;
+        content = JSON.stringify(obj);
+
         this.write(`${this.logFolder}/${this.getFilename()}.error`, content);
         if (!this.isProduction) console.error(content);
     }
 
+    // TODO
+    // make content to object
     debug(content) {
         if (!this.isDebug) return true;
+        if(typeof content !== "string") content = JSON.stringify(content);
+        content = new Date().toLocaleString() + "," + content;
         this.write(`${this.logFolder}/${this.getFilename()}.debug`, content);
         if (!this.isProduction) console.debug(content);
     }
 
-    access(content) {
+    access(obj) {
         if (!this.isAcccess) return true;
+        if (typeof obj !== "object") return;
+        var content = JSON.stringify(obj);
+
         this.write(`${this.logFolder}/${this.getFilename()}.info`, content);
         if (!this.isProduction) console.log(content);
     }

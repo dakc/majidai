@@ -125,6 +125,7 @@ class Krequest extends Kresponse {
      */
     logSuffix() {
         return {
+            access: new Date().toLocaleString(),
             ip: this.ip(),
             host: this.hostName(),
             ua: this.userAgent(),
