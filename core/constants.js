@@ -27,7 +27,7 @@ module.exports = {
             "server": "khttp@0.1.0",
         },
         contentType: (function () {
-            var data = {
+            var allowedExt = {
                 ".html": "text/html",
                 ".css": "text/css",
                 ".js": "text/javascript",
@@ -35,15 +35,27 @@ module.exports = {
                 ".jpeg": "image/jpeg",
                 ".png": "image/png",
                 ".gif": "image/gif",
+                ".ico": "image/x-icon",
                 ".pdf": "application/pdf"
             };
+
+            var binaryResp = [".jpg", ".jpeg", ".png", ".gif", ".ico", ".pdf"];
     
             return {
-                get: function () {
-                    return data;
+                getExt: function () {
+                    return allowedExt;
                 },
-                add: function (key, val) {
-                    data[key] = val;
+                addExt: function (key, val) {
+                    if (typeof key !== "string" || key.trim().length == 0) return;
+                    if (typeof val !== "string" || val.trim().length == 0) return;
+                    allowedExt[key.toLocaleLowerCase()] = val;
+                },
+                getBinayResp: function () {
+                    return binaryResp;
+                },
+                addBinaryResp: function (itm) {
+                    if (typeof itm !== "string" || itm.trim().length == 0) return;
+                    binaryResp.push(itm.toLocaleLowerCase());
                 }
             }
         })(),

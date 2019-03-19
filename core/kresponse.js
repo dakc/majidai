@@ -112,13 +112,18 @@ class Kresponse {
             if (this.response._header) return;
             if (fs.existsSync(filePath)) {
                 if (!fs.statSync(filePath).isSymbolicLink() && fs.statSync(filePath).isFile()) {
-                    let ext = path.extname(filePath);
-                    let allowedExt = Object.keys(this.contentType);
+                    let ext = path.extname(filePath).toLocaleLowerCase();
+                    let allowedExt = Object.keys(this.contentType.getExt());
                     if (allowedExt.includes(ext)) {
-                        let contType = this.contentType[ext];
+                        let contType = this.contentType.getExt()[ext];
                         this.response.statusCode = 200;
                         this.response.setHeader("Content-Type", `${contType}; charset=utf-8`);
-                        fs.createReadStream(filePath, "utf-8").pipe(this.response);
+                        // if images are passed with second parameter as encoding then browser wont display them properly
+                        if (this.contentType.getBinayResp().includes(ext)) {
+                            fs.createReadStream(filePath).pipe(this.response);
+                        } else {
+                            fs.createReadStream(filePath, "utf-8").pipe(this.response);
+                        }
                         return;
                     }
                 }

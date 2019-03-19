@@ -96,11 +96,31 @@ class Khttp {
                     key.trim().length &&
                     typeof _config["contentType"][key] == "string" &&
                     _config["contentType"][key].trim().length) {
-                    this.config.contentType.add(key, _config["contentType"][key]);
+                    this.config.contentType.addExt(key, _config["contentType"][key]);
                 }
             }
 
             delete _config["contentType"];
+        }
+        // update contenttype (deleting _config["respAsBinary"] is important otherwise it will be overwritten)
+        if (_config.hasOwnProperty("respAsBinary")) {
+            if (_config["respAsBinary"] == undefined || typeof _config["respAsBinary"] != "object") {
+                throw new TypeError("respAsBinary is not valid object");
+            }
+
+            if (!Array.isArray(_config["respAsBinary"])) {
+                throw new TypeError("respAsBinary value should be array of extension.");
+            }
+
+            _config["respAsBinary"].forEach(element => {
+                if (typeof element !== "string") {
+                    throw new TypeError("respAsBinary value should be array of extension(string).");
+                }
+
+                this.config.contentType.addBinaryResp(element);
+            });
+
+            delete _config["respAsBinary"];
         }
 
         // update the value set by user
@@ -187,7 +207,7 @@ class Khttp {
         // start session
         try {
             kApp = new Krequest(httpReq, httpResp);
-            kApp.setContentType(this.config.contentType.get());
+            kApp.setContentType(this.config.contentType);
             kApp.setHeader(this.config.header);
 
             httpReq = httpResp = null;
