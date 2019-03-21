@@ -203,25 +203,43 @@ class Khttp {
         let sessObj = this.session;
         let logger = this.logger;
         let cookieId = "";
-
+        // return the prefix to be added while writting log
+        let getLogPrefix = function () {
+            return {
+                access: new Date().toLocaleString(),
+                ip: kApp.ip() || "",
+                host: kApp.hostName() || "",
+                ua: kApp.userAgent() || "",
+                method: kApp.method() || "",
+                url: kApp.url() || "",
+                referer: kApp.referrer() || ""
+            }
+        }
+        // write error log
+        let writeError = function (errMsg) {
+            let errCont = getLogPrefix();
+            errCont["msg"] = errMsg;
+            logger.error(JSON.stringify(errCont));
+        }
+        
         // start session
         try {
             kApp = new Krequest(httpReq, httpResp);
             kApp.setContentType(this.config.contentType);
             kApp.setHeader(this.config.header);
-
             httpReq = httpResp = null;
-            logger.access(kApp.logSuffix());
 
-            // on error event 
+            // write access log
+            logger.access(JSON.stringify(getLogPrefix()));
+
+            // on error event while serving REQUEST
             kApp.request.on("error", (err) => {
-                logger.error(kApp.logSuffix(), `【Request Error】,${err.message}`);
-                kApp.respondErr(500);
-                kApp = null;
-                return;
+                writeError(`【Request Error】,${err.message}`);
+                return kApp.respondErr(500);
             });
+            // on error event while serving RESPONSE
             kApp.response.on("error", (err) => {
-                logger.error(kApp.logSuffix(), `【Response Error】,${err.message}`);
+                writeError(`【Response Error】,${err.message}`);
                 return kApp.respondErr(500);
             });
 
@@ -246,8 +264,7 @@ class Khttp {
                 let reqPage = path.join(this.rootDir, this.config.publicDir, kApp.homePath());
                 // respond to static files
                 if (fs.existsSync(reqPage) && this.isSecure(reqPage)) {
-                    kApp.sendStaticResponse(reqPage);
-                    return;
+                    return kApp.sendStaticResponse(reqPage);
                 }
             }
         } catch (error) {
@@ -257,12 +274,21 @@ class Khttp {
 
         // make methods accessible from user
         let createUserMethods = function () {
-            if (logger.isWrite) {
-                // todo make simple for user purpose
-                Object.defineProperty(kApp, "logger", {
-                    value: logger
-                });
-            }
+            // add logger function for user
+            let userLogger = Object.create(null);
+            Object.defineProperty(userLogger, "debug", {
+                value: logger.debug,
+                enumerable:true
+            });
+            Object.defineProperty(userLogger, "error", {
+                value: writeError,
+                enumerable:true
+            });
+            Object.defineProperty(kApp, "logger", {
+                value: userLogger
+            });
+
+            // add session functions for user
             Object.defineProperty(kApp, "session", {
                 value: {
                     put: function (key, value) {
@@ -302,13 +328,6 @@ class Khttp {
 
         // create response
         try {
-            // send not found
-            if (!this.getRouting.has(kApp.homePath()) &&
-                !this.postRouting.has(kApp.homePath())) {
-                logger.error(kApp.logSuffix(), "Not Found");
-                kApp.respondErr(404);
-            }
-
             // remove the overtimed session id and update access time for current user
             this.session.validate(cookieId);
             // create user accesible methods
@@ -316,6 +335,12 @@ class Khttp {
 
             // send response for GET
             if (kApp.request.method == "GET") {
+                // send not found
+                if (!this.getRouting.has(kApp.homePath())) {
+                    writeError(`Not Found`);
+                    return kApp.respondErr(404);
+                }
+                
                 Object.defineProperty(kApp, "data", {
                     value: {
                         get: function () {
@@ -342,6 +367,12 @@ class Khttp {
 
             // send response for POST
             if (kApp.request.method == "POST") {
+                // send not found
+                if (!this.postRouting.has(kApp.homePath())) {
+                    writeError(`Not Found`);
+                    return kApp.respondErr(404);
+                }
+                
                 if (kApp.request.headers["content-length"] > this.config.maxBodySize) {
                     return kApp.request.emit("error", Error("post body size greater then set in the configuration."));
                 } 
@@ -372,20 +403,18 @@ class Khttp {
                     if (respData == undefined) return;
                     // send response as plain string
                     if (typeof respData == "string") {
-                        kApp.sendResp("text/plain", respData);
-                        return;
+                        return kApp.sendResp("text/plain", respData);
                     } else {
                         let retData = JSON.stringify(respData);
                         if (retData != undefined) {
-                            kApp.sendResp("text/plain", retData);
-                            return;
+                            return kApp.sendResp("text/plain", retData);
                         }
                     }
                 });
             }
         } catch (err) {
             // send internal server error
-            logger.error(kApp.logSuffix(), err.message);
+            writeError(err.message);
             return kApp.respondErr(500);
         }
 

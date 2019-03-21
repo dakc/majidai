@@ -119,21 +119,6 @@ class Krequest extends Kresponse {
     referrer() {
         return this.request.headers.referrer || this.request.headers.referer;
     }
-
-    /**
-     * returns prefix for writting log
-     */
-    logSuffix() {
-        return {
-            access: new Date().toLocaleString(),
-            ip: this.ip(),
-            host: this.hostName(),
-            ua: this.userAgent(),
-            method: this.method(),
-            url: this.url(),
-            referer:this.referrer()
-        }
-    }
 }
 
 module.exports = Krequest;

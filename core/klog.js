@@ -3,31 +3,33 @@ const fs = require("fs");
 class Klog {
     constructor(config) {
         try {
-            this.isWrite = false;
-            this.isProduction = true;
-            this.isDebug = false;
-            this.isAcccess = true;
-            this.isError = true;
-            this.logFolder = "./log";
-            this.validate(config);
-        } catch (error) {
-            throw error;
+            this.__isProduction = true;
+            this.__isDebug = false;
+            this.__isAcccess = true;
+            this.__isError = true;
+            this.__logFolder = "./log";
+            this.__validate(config);
+        } catch (err) {
+            throw err;
         }
     }
 
-    validate(config) {
+    /**
+     * validate the configuration object
+     * @param {object} config 
+     */
+    __validate(config) {
         if (config == undefined || typeof config != "object") return;
         if (Object.keys(config).length === 0) return;
 
         if (!config.hasOwnProperty("folder")) {
-            config.folder = this.logFolder;
+            config.folder = this.__logFolder;
         }
         
-        this.isDebug = config.hasOwnProperty("debug") ? config.debug : this.isDebug;
-        this.isAcccess = config.hasOwnProperty("access") ? config.access : this.isAcccess;
-        this.isError = config.hasOwnProperty("error") ? config.error : this.isError;
-        this.isWrite = true;
-        this.logFolder = config.folder;
+        this.__isDebug = config.hasOwnProperty("debug") ? config.debug : this.__isDebug;
+        this.__isAcccess = config.hasOwnProperty("access") ? config.access : this.__isAcccess;
+        this.__isError = config.hasOwnProperty("error") ? config.error : this.__isError;
+        this.__logFolder = config.folder;
 
         if (!fs.existsSync(config.folder)) {
             fs.mkdirSync(config.folder);
@@ -38,15 +40,20 @@ class Klog {
     /**
      * set logfile name to yyyy-mm-dd
      */
-    getFilename() {
+    __getFilename() {
         const zeroFill = (num) => { return num.toString().length < 2 ? Array(2).join("0") + num : num };
         const dateObj = new Date();
         return `${dateObj.getFullYear()}-${zeroFill(dateObj.getMonth() + 1)}-${zeroFill(dateObj.getDate())}`;
     }
 
-    write(filePath, content) {
+    /**
+     * write content to a file with utf8 encodeing assynchronously
+     * 
+     * @param {string} filePath 
+     * @param {string} content 
+     */
+    __write(filePath, content) {
         try {
-            if (!this.isWrite) return;
             let logStream = fs.createWriteStream(filePath, {
                 flags: 'a'
             });
@@ -57,32 +64,55 @@ class Klog {
         }    
     }
 
-    error(obj, content = "") {
-        if (!this.isError) return true;
-        if (typeof obj !== "object") return;
-        if (content) obj["msg"] = content;
-        content = JSON.stringify(obj);
+    /**
+     * check if the given data is not empty string
+     * @param {string} arg 
+     */
+    __isEmptyString(arg) {
+        if (typeof arg !== "string") return false;
+        if (!arg.trim().length) return false;
+        return true;
+    }
 
-        this.write(`${this.logFolder}/${this.getFilename()}.error`, content);
+    /**
+     * write error log to a file
+     * if the application mode is not production,
+     * then it will also show the log on console
+     * @param {string} content 
+     */
+    error(content) {
+        if (!this.__isError) return true;
+        if (!this.__isEmptyString(content)) return false;
+        this.__write(`${this.__logFolder}/${this.__getFilename()}.error`, content);
         if (!this.isProduction) console.error(content);
     }
 
-    // TODO
-    // make content to object
+    /**
+     * write debug log to a file
+     * if the application mode is not production,
+     * then it will also show the log on console
+     * @param {string} content 
+     */
     debug(content) {
-        if (!this.isDebug) return true;
-        if(typeof content !== "string") content = JSON.stringify(content);
+        if (!this.__isDebug) return true;
+        if (!this.__isEmptyString(content)) return false;
+
         content = new Date().toLocaleString() + "," + content;
-        this.write(`${this.logFolder}/${this.getFilename()}.debug`, content);
+        this.__write(`${this.__logFolder}/${this.__getFilename()}.debug`, content);
         if (!this.isProduction) console.debug(content);
     }
 
-    access(obj) {
-        if (!this.isAcccess) return true;
-        if (typeof obj !== "object") return;
-        var content = JSON.stringify(obj);
+    /**
+     * write access log to a file
+     * if the application mode is not production,
+     * then it will also show the log on console
+     * @param {string} content 
+     */
+    access(content) {
+        if (!this.__isAcccess) return true;
+        if (!this.__isEmptyString(content)) return false;
 
-        this.write(`${this.logFolder}/${this.getFilename()}.info`, content);
+        this.__write(`${this.__logFolder}/${this.__getFilename()}.access`, content);
         if (!this.isProduction) console.log(content);
     }
 }

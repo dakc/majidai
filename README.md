@@ -170,11 +170,17 @@ return "Hello majidai";
 return {name:"majidai", id:12337};
 ```
 
-3. return static page : return either absolute or relative path.
-The path should be set as public folder. By default ROOT folder + "public" is set public folder.
+3. return content from file : return either absolute or relative path.
 ```
-return app.sendStaticResponse("./public/home.html");
+return app.sendStaticResponse("./somewhere/home.html");
 ```
+
+4. serve css,js and images : place the files below public folder, which can be changed from configuration.
+By default ROOT folder + "public" is set public folder.
+```
+<link rel="stylesheet" href="css/index.css">
+```
+※ Above Path means, 「ROOT folder」+ "/public/css/index.css" by default configuration.
 
 ## 8. Configuration
 create a config object.
