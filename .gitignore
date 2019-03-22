@@ -2,6 +2,7 @@ log
 .vscode
 node_modules
 .npmignore
+.gitignore
 server.js
 webpack.config.js
 public/

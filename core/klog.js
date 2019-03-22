@@ -1,10 +1,10 @@
 const fs = require("fs");
 
 class Klog {
-    constructor(config) {
+    constructor(config,isProd=true) {
         try {
-            this.__isProduction = true;
-            this.__isDebug = false;
+            this.__isProduction = typeof isProd === "boolean" ? isProd : true;
+            this.__isDebug = true;
             this.__isAcccess = true;
             this.__isError = true;
             this.__logFolder = "./log";
