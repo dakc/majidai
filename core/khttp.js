@@ -388,27 +388,31 @@ class Khttp {
                 });
 
                 kApp.request.on('end', () => {
-                    let parsedData = querystring.parse(data);
-                    Object.defineProperty(kApp, "data", {
-                        value: {
-                            post: function () {
-                                return parsedData;
-                            },
-                        }
-                    });
+                    try {
+                        let parsedData = querystring.parse(data);
+                        Object.defineProperty(kApp, "data", {
+                            value: {
+                                post: function () {
+                                    return parsedData;
+                                },
+                            }
+                        });
 
-                    // run the function defined by user
-                    let respData = postRouting.get(kApp.homePath())(kApp);
-                    // if user sends custom rsponse then he should return undefined
-                    if (respData == undefined) return;
-                    // send response as plain string
-                    if (typeof respData == "string") {
-                        return kApp.sendResp("text/plain", respData);
-                    } else {
-                        let retData = JSON.stringify(respData);
-                        if (retData != undefined) {
-                            return kApp.sendResp("text/plain", retData);
+                        // run the function defined by user
+                        let respData = postRouting.get(kApp.homePath())(kApp);
+                        // if user sends custom rsponse then he should return undefined
+                        if (respData == undefined) return;
+                        // send response as plain string
+                        if (typeof respData == "string") {
+                            return kApp.sendResp("text/plain", respData);
+                        } else {
+                            let retData = JSON.stringify(respData);
+                            if (retData != undefined) {
+                                return kApp.sendResp("text/plain", retData);
+                            }
                         }
+                    } catch (err) {
+                        return kApp.request.emit("error", err);
                     }
                 });
             }

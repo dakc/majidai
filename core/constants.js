@@ -18,13 +18,13 @@ module.exports = {
         },
         publicDir: "./public",
         isProduction: true,
-        sessionTime: 1000 * 60,// miliseconds
+        sessionTime: 1000 * 60 * 5,// miliseconds
         maxBodySize: 100 * 1024,  // byte
         header: {
             "x-content-type-options": "nosniff",
             "x-frame-options": "SAMEORIGIN",
             "x-xss-protection": "1; mode=block",
-            "server": "khttp@0.1.0",
+            "server": "khttp@1.0",
         },
         contentType: (function () {
             var allowedExt = {

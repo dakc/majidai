@@ -84,7 +84,7 @@ class Klog {
         if (!this.__isError) return true;
         if (!this.__isEmptyString(content)) return false;
         this.__write(`${this.__logFolder}/${this.__getFilename()}.error`, content);
-        if (!this.isProduction) console.error(content);
+        if (!this.__isProduction) console.error(content);
     }
 
     /**
@@ -99,7 +99,7 @@ class Klog {
 
         content = new Date().toLocaleString() + "," + content;
         this.__write(`${this.__logFolder}/${this.__getFilename()}.debug`, content);
-        if (!this.isProduction) console.debug(content);
+        if (!this.__isProduction) console.debug(content);
     }
 
     /**
@@ -113,7 +113,7 @@ class Klog {
         if (!this.__isEmptyString(content)) return false;
 
         this.__write(`${this.__logFolder}/${this.__getFilename()}.access`, content);
-        if (!this.isProduction) console.log(content);
+        if (!this.__isProduction) console.log(content);
     }
 }
 module.exports = Klog;

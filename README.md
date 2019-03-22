@@ -1,5 +1,5 @@
 # majidai
-A simple web framework for nodejs
+A simple and light web framework for nodejs. For now it only supports GET and POST method only.
 
 [![npm](https://img.shields.io/npm/v/majidai.svg)](https://www.npmjs.com/package/majidai) 
 [![GitHub license](https://img.shields.io/github/license/dakc/majidai.svg?style=popout)](https://github.com/dakc/majidai/blob/master/LICENSE) 
@@ -9,7 +9,7 @@ A simple web framework for nodejs
 ## 1. Installation
 Install the library by using following command.
 ```
-npm install --save-dev majidai
+npm install majidai
 ```
 
 ## 2. Start
@@ -37,10 +37,10 @@ server.post("/login", function (app) {
     // get post data
     var postParams = app.data.post();
     
-    // get login id (name=login_id)
+    // get login id (form input name=login_id)
     var userId = postParams.login_id;
     
-    // get login password (name=login_pass)
+    // get login password (form input name=login_pass)
     var userPass = postParams.login_pass"";
     
     // check user id & pass (user authentication)
@@ -83,52 +83,73 @@ var myId = app.data.get("id");
 ## 4. Session
 majidai will help you to manipulate data easily into session.
 it has following properties
-1. put : it will save the data into session
+##### ① put
+It will save the data into session
 ```
-app.session.put(session_id, value);
-```
-
-2. get : it will get the data from session
-```
-app.session.get(session_id)
+app.session.put(key, value);
 ```
 
-3. delete : it will delete data from session for given key
+##### ② get 
+It will get the data from session
 ```
-app.session.delete(session_id)
+app.session.get(key)
 ```
 
-4. destroy : it will delete all the datas of given user from session
+##### ③ delete 
+It will delete the key from session
+```
+app.session.delete(key)
+```
+
+##### ④ destroy 
+It will delete all the datas of given user from session
 ```
 app.session.destroy();
 ```
 
-## 5. Logging
-majidai will help you to log as per you need. logs are created by date.
-it has 3 modes of logging.
-1. access : It will log the access data. By default it is on.
-you can use it like
+##### ⑤ regenId
+It will regenarate the session id.
 ```
-app.logger.access("some messages");
+app.session.regenId();
+```
+##### ※ Do not use the key starting with double underscore which can conflict with system variable.
+```
+app.session.put("__KEY","some value");
 ```
 
-2. error : It will log if any error occours. By default it is on.
+## 5. Logging
+Logs are created by date(yyyy-mm-dd.type).
+It has 3 modes of logging.
+##### ① access 
+It will log the client data. File name will be yyyy-mm-dd.access.
+It will log the ip address and other client information.
+By default it is on　But you can off it through configuration if not needed.
+
+##### ② error 
+It will log if any error occours.
 you can use it like
 ```
 app.logger.error("error message");
 ```
+By default it is on　But you can off it through configuration if not needed.
 
-3. debug : It will log the information for debugging purpose. By default it is on.
+##### ③ debug 
+It will log the information for debugging purpose.
 you can use it like
 ```
 app.logger.debug("some contents");
 ```
+By default it is on　But you can off it through configuration if not needed.
 
 ## 6. Authenticated Pages
-majidai has two powerful functions named 
-1. triggerLoginCheck
-2. mustBeLoggedIn
-You can easily set a routing for authenticated users
+majidai has two powerful functions
+##### ① triggerLoginCheck
+After user is authenticated call this function otherwise , mushBeLoggedIn wont work.This function will regenrate session id automatically.
+
+##### ② mustBeLoggedIn
+If the User visits the page having this function called before triggerLoginCheck, majidai will redirect to the url given as parameter.
+
+Sample
 ```
 // authentication
 server.post("/login", function (app) {
@@ -160,22 +181,26 @@ server.get("/membership", app => {
 
 ## 7. Response
 You can response static pages, json datas and plain text.
-1. respond plain text : just return string
+##### ① respond plain text 
+Just return string
 ```
 return "Hello majidai";
 ```
 
-2. return json : return json object
+##### ② return json 
+return json object
 ```
 return {name:"majidai", id:12337};
 ```
 
-3. return content from file : return either absolute or relative path.
+##### ③ return content from file 
+return either absolute or relative path.
 ```
 return app.sendStaticResponse("./somewhere/home.html");
 ```
 
-4. serve css,js and images : place the files below public folder, which can be changed from configuration.
+##### ④ Serve css,js and images 
+place the files below public folder, which can be changed from configuration.
 By default ROOT folder + "public" is set public folder.
 ```
 <link rel="stylesheet" href="css/index.css">
@@ -183,7 +208,7 @@ By default ROOT folder + "public" is set public folder.
 ※ Above Path means, 「ROOT folder」+ "/public/css/index.css" by default configuration.
 
 ## 8. Configuration
-create a config object.
+The default configuration for majidai is as follows.
 ```
 var config =  {
         port: 80,
@@ -195,18 +220,25 @@ var config =  {
             error: true
         },
         publicDir: "./public",
-        isProduction: true,
-        sessionTime: 1000 * 60,// miliseconds
+        isProduction: true, // if set false it will output all the logs on console
+        sessionTime: 1000 * 60 * 5,// miliseconds
         maxBodySize: 100 * 1024,  // byte
         header: {
             "x-content-type-options": "nosniff",
             "x-frame-options": "SAMEORIGIN",
             "x-xss-protection": "1; mode=block",
-            "server": "my server",
+            "server": "khttp@1.0",
         },
         contentType : {
+            ".html": "text/html",
+            ".css": "text/css",
+            ".js": "text/javascript",
+            ".jpg": "image/jpeg",
             ".jpeg": "image/jpeg",
-            ".ext":"app/type"
+            ".png": "image/png",
+            ".gif": "image/gif",
+            ".ico": "image/x-icon",
+            ".pdf": "application/pdf",
         }
     }
 ```
@@ -217,5 +249,6 @@ const server = new majidai(config);
 ```
 
 ## TODO
-1. Unit testing.
-2. handle multipart form-data
+① Unit testing
+② Handle file upload
+③ More clear Documentation
