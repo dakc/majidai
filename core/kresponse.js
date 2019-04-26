@@ -12,13 +12,15 @@ class Kresponse {
      * constructor
      * @param {*} httpResp 
      */
-    constructor(httpResp) {
-        // http response object
-        this.response = httpResp;
+    constructor() {       
         // content type
         this.contentType = {};
     }
 
+    setResponse(response){
+        // http response object
+        this.response = response;
+    }
 
     /**
      * set the allowed contenty type
