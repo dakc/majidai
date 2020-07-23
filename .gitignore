@@ -1,0 +1,7 @@
+.vscode
+.npmignore
+node_modules
+ssl
+package-lock.json
+debug.js
+*.txt

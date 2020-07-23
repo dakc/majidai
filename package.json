@@ -1,0 +1,34 @@
+{
+  "name": "majidai",
+  "version": "2.0.0",
+  "description": "A simple and light weight web framework for nodejs",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test/*.spec.js",
+    "test_config": "mocha test/config.spec.js",
+    "test_config_success": "mocha test/config.success.spec.js",
+    "test_content_type": "mocha test/respond_content_type.spec.js",
+    "test_status_code": "mocha test/respond_status_code.spec.js",
+    "test_routing_custom": "mocha test/routing_custom.spec.js",
+    "test_routing_post": "mocha test/routing_post.spec.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dakc/majidai.git"
+  },
+  "keywords": [
+    "web server",
+    "nodejs web framework"
+  ],
+  "author": "dakc<dakc@outlook.jp>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dakc/majidai/issues"
+  },
+  "homepage": "https://dakc.github.io/majidai.html",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^7.2.0",
+    "needle": "^2.5.0"
+  }
+}

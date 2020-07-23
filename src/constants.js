@@ -1,0 +1,41 @@
+module.exports = {
+    
+    MSG: {
+        ERR_INVALID_DATA_TYPE_CONTENT_TYPE: "contentType should be a valid string",
+        ERR_INVALID_DATA_TYPE_CHARSET: "charset should be a valid string",
+        ERR_INVALID_DATA_TYPE_HTTP_METHOD: "allowedMethod should be array of string having item within ['GET', 'POST', 'HEAD', 'PUT', 'DELETE', 'CONNECT', 'OPTIONS', 'TRACE', 'PATCH']",
+        ERR_INVALID_DATA_TYPE_PORT: "port should be number type",
+        ERR_INVALID_DATA_TYPE_HOST: "host should be string type",
+        ERR_INVALID_DATA_TYPE_PUBLIC_DIR: "DocumentRoot should be string type",
+        ERR_INVALID_PUBLIC_DIR: "DocumentRoot should be a valid directory different from ROOT directory",
+        ERR_INVALID_DATA_TYPE_HTTP_LISTEN: "listen should be boolean type",
+        ERR_INVALID_DATA_TYPE_HTTP2_LISTEN: "http2 should be boolean type",
+        ERR_INVALID_DATA_TYPE_HTTP3_LISTEN: "http3 should be boolean type",
+        ERR_PFX_FILE_NOT_FOUND: "ssl certificate(.pfx) does not exists",
+        ERR_INVALID_DATA_TYPE_MAX_BODY_SIZE: "maxBodySize should be number type",
+        ERR_INVALID_DATA_TYPE_HEADER: "ResponseHeader should be json object type",
+        ERR_INVALID_DATA_TYPE_DIRECTORY_INDEX: "DirectoryIndex should be a non-empty string",
+        ERR_NOT_VALID_ROUTING: "not valid routing(use numbers,letters,-,_)",
+        ERR_ROUTING_DEFINED_MULTIPLE: "same routing is defined multiple time",
+        ERR_NOT_VALID_CUSTOM_ROUTING: "not valid custom routing. First Arg should be object of structure \n{method:['GET', 'POST'], path:'/dashboard'}",
+        ERR_NOT_SUPPORTED_CONTENT_TYPE: "not supported content type",
+        ERR_INVALID_ROUTING: "routing is not valid",
+        ERR_INVALID_CONFIGURATION: "configuration is not valid",
+        ERR_SERVER_NOT_LISTENING: "Server is not listening.Please check configuration.",
+        ERR_PAGE_NOT_FOUND: "Page not found.",
+        ERR_INVALID_DATA_TYPE_CUSTOM_ROUTING: "not valid custom routing. First Arg should be object of structure \n{method:['GET', 'POST'], path:'/dashboard'}",
+        ERR_INVALID_DATA_TYPE_ROUTE_RETURN: "type of return from the routing shoukd be either string or json object. Retuned - ",
+        ERR_NOT_ALLOWED_HTTP_METHOD: "requested HTTP method is not allowed. Please check configuration. Received",
+        ERR_CONTENT_LENGTH_EXCEEDS_SETTING: "content-length is greater then set in maxBodySize paramenter. Received",
+        ERR_NOT_VALID_EXTENSION: "first parameter should be a valid extension of string type starting with dot in 'setMimeType'.",
+        ERR_NOT_VALID_MIMETYPE: "second parameter should be a valid mimetype in 'setMimeType'.",
+        ERR_NOT_VALID_PARAM_CUSTOM_ERR: "parameter of function 'customizeErrorPage' should be of function type.",
+        ERR_INVALID_DATA_TYPE_PARAM_RETURN_CUSTOM_ERR: "callback for 'customizeErrorPage' should return object having property 'contentType' and 'content'.",
+        ERR_INVALID_DATA_TYPE_PARAM_RETURN_CONTENT_TYPE_CUSTOM_ERR: "callback for 'customizeErrorPage' is returning object having unsupported value for 'contentType'.",
+
+        INFO_SERVER_STOPPED: "Server Stopped Listening.",
+        INFO_NOT_SUPPORTED: "Not supported at current version!",
+        INFO_NOT_SUPPORTED_POST_TYPE_FORM_DATA: "skipping form-data content as not supported by default.",
+        
+    }
+};
