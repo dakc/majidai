@@ -6,7 +6,7 @@ It supports http,https and http2 protocol by default.
 
 [See here for Detail - https://dakc.github.io/majidai.html](https://dakc.github.io/majidai.html)
 
-※日本語の場合は、[Qiitaの記事を参考にしてください。](https://qiita.com/_dakc_/items/dfe7f7ec2f2e1ab36443)
+※日本語の場合は、[Qiitaの記事を参考にしてください。](https://qiita.com/_dakc_/items/e0057e98a58d581f37c6)
 
 [![Build Status](https://travis-ci.com/dakc/majidai.svg?branch=master)](https://travis-ci.com/dakc/majidai)
 [![npm](https://img.shields.io/npm/v/majidai.svg)](https://www.npmjs.com/package/majidai) 
@@ -46,6 +46,12 @@ const majidai = require("majidai");
 
 // create instance
 const server = new majidai();
+
+// majidai emits 2 types of events
+// show the client info on console
+server.on('stdout', data => console.log(data));
+// show the error on console
+server.on('stdout', data => console.log(data));
 
 // define POST routing at '/home'
 // param enclosed between {} can be accessed as GET parameter
