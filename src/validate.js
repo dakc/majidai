@@ -40,6 +40,8 @@ module.exports = {
                         if ("boolean" != typeof e[o].listen) throw new TypeError(MSG.ERR_INVALID_DATA_TYPE_HTTP_LISTEN);
                         r[o].listen = e[o].listen
                     }
+                    
+                    if (!r[o].listen) return;
                     if (e[o].hasOwnProperty("http2")) {
                         if ("boolean" != typeof e[o].http2) throw new TypeError(MSG.ERR_INVALID_DATA_TYPE_HTTP2_LISTEN);
                         r[o].http2 = e[o].http2
@@ -64,6 +66,10 @@ module.exports = {
         if (e.hasOwnProperty("directoryIndex")) {
             if (!isValidString(e.directoryIndex)) throw new TypeError(MSG.ERR_INVALID_DATA_TYPE_DIRECTORY_INDEX);
             r.directoryIndex = e.directoryIndex
+        }
+        if (e.hasOwnProperty("directoryTraversal")) {
+            if ("boolean" != typeof e.directoryTraversal) throw new TypeError(MSG.ERR_INVALID_DATA_TYPE_DIRECTORY_TRAVERSAL);
+            r.directoryTraversal = e.directoryTraversal
         }
         if (e.hasOwnProperty("responseHeader")) {
             if ("object" != typeof e.responseHeader) throw new TypeError(MSG.ERR_INVALID_DATA_TYPE_HEADER);

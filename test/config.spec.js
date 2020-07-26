@@ -6,6 +6,7 @@ module.exports = {
     charset: "utf-8",
     maxBodySize: 100 * 1024, // byte
     directoryIndex: "index.html",
+    directoryTraversal: false,
     allowedMethod: ["GET", "POST", "HEAD", "PUT", "DELETE", "CONNECT", "OPTIONS", "TRACE", "PATCH"],
     responseHeader: {
         "x-frame-options": "SAMEORIGIN",
@@ -158,6 +159,29 @@ describe("test for invalid directory index aka directoryIndex", () => {
     });
 });
 
+// ===========================================
+// unit testing for directoryTraversal
+describe("test for invalid directoryTraversal", () => {
+    it("should throw error for number", () => {
+        var config = { directoryTraversal: 34 };
+        chai.expect(function () {
+            new majidai(config)
+        }).to.throw(MSG.ERR_INVALID_DATA_TYPE_DIRECTORY_TRAVERSAL);
+    });
+    it("should throw error for string", () => {
+        var config = { directoryTraversal: "test" };
+        chai.expect(function () {
+            new majidai(config)
+        }).to.throw(MSG.ERR_INVALID_DATA_TYPE_DIRECTORY_TRAVERSAL);
+    });
+    it("should throw error for object", () => {
+        var config = { directoryTraversal: [] };
+        chai.expect(function () {
+            new majidai(config)
+        }).to.throw(MSG.ERR_INVALID_DATA_TYPE_DIRECTORY_TRAVERSAL);
+    });
+});
+ 
 // ===========================================
 // unit testing for http methods
 describe("test for invalid http methods", () => {

@@ -5,6 +5,7 @@ module.exports = {
     charset: "utf-8",
     maxBodySize: 100 * 1024, // byte
     directoryIndex: "index.html",
+    directoryTraversal: false,
     allowedMethod: ["GET", "POST", "HEAD", "PUT", "DELETE", "CONNECT", "OPTIONS", "TRACE", "PATCH"],
     responseHeader: {
         "x-frame-options": "SAMEORIGIN",

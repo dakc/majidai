@@ -88,6 +88,14 @@ Open Browser and access to access to http://your_ip_address
 - https://dakc.github.io/majidai.html
 
 ## Release information
+### July 27th, 2020
+* ver 2.1.0
+* added support for streaming audio and video
+* added directory traversal feature. By default it is set to off. We can set on by passing following parameter
+```javascript
+const config = {directoryTraversal: true}
+```
+
 ### July 24th, 2020
 * ver 2.0.0
 * added support for https including http2 protocol. Below will be the configuration for creating https server.

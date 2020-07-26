@@ -104,7 +104,7 @@ class Khttp extends EventEmitter {
         };
 
         if (!isListening) throw new Error(MSG.ERR_SERVER_NOT_LISTENING);
-        
+
         // uncaught exception
         let s = this;
         process.on('uncaughtException', function (err) {
@@ -165,7 +165,7 @@ class Khttp extends EventEmitter {
 
             // ===========================================
             // set response header
-            this._resp.setResponse(res,
+            this._resp.setResponse(req, res,
                 this._config.responseHeader,
                 this._config.contentType,
                 this._config.charset);
@@ -175,7 +175,7 @@ class Khttp extends EventEmitter {
 
             // get homepath
             let homePath = userObj.client.path();
-            let reqPage = path.join(this._config.rootDir, this._config[httpType].documentRoot, homePath);
+            let reqPage = path.join(this._config[httpType].documentRoot, homePath);
 
             // ===========================================
             // GET request
@@ -197,9 +197,29 @@ class Khttp extends EventEmitter {
                 }
 
                 // respond to static files　directoryindex only if document root is set
-                reqPage += this._config.directoryIndex;
-                if (this._config[httpType].documentRoot && validate.staticFile(reqPage)) {
-                    return this._resp.sendStaticResponse(reqPage);
+                let indexPage = reqPage + this._config.directoryIndex;
+                if (this._config[httpType].documentRoot && validate.staticFile(indexPage)) {
+                    return this._resp.sendStaticResponse(indexPage);
+                }
+
+                // directory traversal
+                if (this._config.directoryTraversal && reqPage.endsWith(path.sep) && fs.existsSync(reqPage)) {
+                    var files = fs.readdirSync(reqPage);
+                    var li = "<li><a href='../'>..</a></li>";
+                    files.forEach(function (file) {
+                        // if (!validate.staticFile(path.join(reqPage, file))) return;
+                        var lk = "";
+                        var f = path.join(reqPage, file);
+                        if (validate.staticFile(f)) {
+                            lk = file;
+                        } else {
+                            if (fs.statSync(f).isDirectory()) {
+                                lk = file + path.sep;
+                            }
+                        }
+                        li += `<li><a href="${lk}">${file}</a></li>`;
+                    });
+                    return userObj.respond.html(`<h1>Index of ${homePath}</h1><ul>${li}</ul>`);
                 }
 
                 // if no routing is defined for '/' show welcome page
@@ -213,7 +233,7 @@ class Khttp extends EventEmitter {
             // respond to POST request
             if (req.method == "POST") {
                 // if form-data run the user defined function
-                if(req.headers["content-type"].includes("multipart/form-data")){
+                if (req.headers["content-type"].includes("multipart/form-data")) {
                     this._logger.info(MSG.INFO_NOT_SUPPORTED_POST_TYPE_FORM_DATA);
                     func.execUserFunction(userObj, this._postRouting.get(homePath).execUserFunc);
                     return;

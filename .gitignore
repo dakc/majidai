@@ -2,6 +2,7 @@
 .npmignore
 node_modules
 ssl
+public
 package-lock.json
 debug.js
 *.txt
