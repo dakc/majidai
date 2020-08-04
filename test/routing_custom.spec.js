@@ -38,9 +38,17 @@ describe("test for multiple HTTP methods for single routing", () => {
             .catch( err => done(err));
     });
 
-    it("should work on parameter routing too.", (done) => {
-        const expectedResult = { "method": "POST", "get": { "name": "abc", "age": "20" }, "post": {"sub": "computer"} };
+    it("should work on parameterized routing too.", (done) => {
+        var expectedResult = { "method": "POST", "get": { "name": "abc", "age": "20" }, "post": {"sub": "computer"} };
         needle('post', `${url}/user/abc/20`, {sub: "computer"}, {json: true})
+            .then(res => assert.deepEqual(res.body, expectedResult), done())
+            .catch( err => done(err));
+        
+    });
+
+    it("should work for path containing '/' though not defined during routing", (done) => {
+        var expectedResult = { "method": "POST", "get": { "name": "abc", "age": "20" }, "post": {"sub": "computer"} };
+        needle('post', `${url}/user/abc/20/`, {sub: "computer"}, {json: true})
             .then(res => assert.deepEqual(res.body, expectedResult), done())
             .catch( err => done(err));
         

@@ -10,7 +10,7 @@ module.exports = {
     responseHeader: {
         "x-frame-options": "SAMEORIGIN",
         "x-xss-protection": "0",
-        "server": "majidai@2.0",
+        "server": "majidai/2.1",
         "Access-Control-Allow-Origin": "*",
         "Accept": "*/*",
     },

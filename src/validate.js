@@ -84,6 +84,8 @@ module.exports = {
         if (r.length < 2) throw new Error(MSG.ERR_INVALID_ROUTING);
         if ("string" != typeof r[0] || "function" != typeof r[1]) throw new Error(MSG.ERR_INVALID_ROUTING);
         if (!/^[a-zA-Z0-9-_{}/]+$/.test(r[0])) throw new Error(MSG.ERR_NOT_VALID_ROUTING);
+        if ("/" != r[0][0]) throw new Error(`${MSG.ERR_INVALID_PATH} - ${r[0]}`);
+        if (r[0].length > 1 && "/" === r[0][r[0].length-1]) r[0] = r[0].substr(0, r[0].length - 1);
         var o = function () {
             var e = [],
                 o = r[0],

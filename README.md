@@ -33,8 +33,15 @@ It should show following page.
 ## 3. Serve static files
 ```javascript
 const majidai = require("majidai");
-const config = {http: {documentRoot: '/somewhere/safe/place'}};
-(new majidai(config)).start();
+const config = {
+    directoryIndex: "index.html",   // default page to display when directory is accessed
+    directoryTraversal: true,       // it will list all the files if no directoryIndex was found (Default: false)
+    http: {
+        documentRoot: '/var/www/html' // files below this directory will be accessible through web
+    }
+};
+const server = new majidai(config);
+server.start();
 ```
 Put "index.html" below "documentRoot" and access to http://your_ip_address/
 
@@ -47,22 +54,24 @@ const majidai = require("majidai");
 // create instance
 const server = new majidai();
 
-// majidai emits 2 types of events
+// majidai emits 2 types of events "stdout" & "stderr"
 // show the client info on console
 server.on('stdout', data => console.log(data));
 // show the error on console
-server.on('stdout', data => console.log(data));
+server.on('stderr', data => console.error(data));
 
 // define POST routing at '/home'
 // param enclosed between {} can be accessed as GET parameter
 server.post("/home/{name}", function (request) {
-    // get specific GET parameter
+    // get value for specific GET parameter
     var getData = request.mj.getParams("name");
     // if no argument is passed 
     // it will return all the Get parameters as json object
 
     // get all POST parameters as JSON object
     var postData = request.mj.postParams();
+    // if argument is passed
+    // it will return the value for that argument
 
     // send response
     // returning json object will respond as application/json to client

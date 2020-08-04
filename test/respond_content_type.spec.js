@@ -55,6 +55,8 @@ server.get("/redirect", function (req, resp) {
     return resp.mj.redirect("./new-redirecting-url");
 });
 
+server.get("/home", () => "Hi");
+
 server.start();
 setTimeout(() => server.stop(), 30 * 1000);
 
@@ -156,5 +158,28 @@ describe("test for content-type", () => {
             })
             .catch(err => console.error(err))
             .finally(done());
+    });
+});
+
+// ===========================================
+// unit  testing for path containing "/" at end or not
+describe("test for path containing '/' or not at end", () => {
+    it("should return Hi without '/' at end", (done) => {
+        needle('get', `${url}/home`)
+            .then(res => {
+                assert.include(res.headers["content-type"], "text/plain");
+                assert.equal(res.body, "Hi");
+                done();
+            })
+            .catch( err => done(err));
+    });
+    it("should return Hi with '/' at end", (done) => {
+        needle('get', `${url}/home/`)
+            .then(res => {
+                assert.include(res.headers["content-type"], "text/plain");
+                assert.equal(res.body, "Hi");
+                done();
+            })
+            .catch( err => done(err));
     });
 });

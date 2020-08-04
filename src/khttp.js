@@ -175,6 +175,7 @@ class Khttp extends EventEmitter {
 
             // get homepath
             let homePath = userObj.client.path();
+            if (homePath.length > 1 && "/" === homePath[homePath.length-1]) homePath = homePath.substr(0, homePath.length - 1);
             let reqPage = path.join(this._config[httpType].documentRoot, homePath);
 
             // ===========================================
@@ -197,13 +198,13 @@ class Khttp extends EventEmitter {
                 }
 
                 // respond to static files　directoryindex only if document root is set
-                let indexPage = reqPage + this._config.directoryIndex;
+                let indexPage = path.join(reqPage, this._config.directoryIndex);
                 if (this._config[httpType].documentRoot && validate.staticFile(indexPage)) {
                     return this._resp.sendStaticResponse(indexPage);
                 }
 
                 // directory traversal
-                if (this._config.directoryTraversal && reqPage.endsWith(path.sep) && fs.existsSync(reqPage)) {
+                if (this._config.directoryTraversal && userObj.client.path().endsWith("/") && fs.existsSync(reqPage)) {
                     var files = fs.readdirSync(reqPage);
                     var li = "<li><a href='../'>..</a></li>";
                     files.forEach(function (file) {

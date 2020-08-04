@@ -33,6 +33,7 @@ module.exports = {
         ERR_NOT_VALID_PARAM_CUSTOM_ERR: "parameter of function 'customizeErrorPage' should be of function type.",
         ERR_INVALID_DATA_TYPE_PARAM_RETURN_CUSTOM_ERR: "callback for 'customizeErrorPage' should return object having property 'contentType' and 'content'.",
         ERR_INVALID_DATA_TYPE_PARAM_RETURN_CONTENT_TYPE_CUSTOM_ERR: "callback for 'customizeErrorPage' is returning object having unsupported value for 'contentType'.",
+        ERR_INVALID_PATH: "path should start with '/'",
 
         INFO_SERVER_STOPPED: "Server Stopped Listening.",
         INFO_NOT_SUPPORTED: "Not supported at current version!",
