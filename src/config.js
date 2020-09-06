@@ -1,6 +1,7 @@
 module.exports = {
     // ===========================================
     // common configuration
+    isDebug: false,
     contentType: "text/plain",
     charset: "utf-8",
     maxBodySize: 100 * 1024, // byte

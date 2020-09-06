@@ -1,6 +1,7 @@
 module.exports = {
     
     MSG: {
+        ERR_INVALID_DATA_TYPE_IS_DEBUG: "isDebug should be of boolean type",
         ERR_INVALID_DATA_TYPE_CONTENT_TYPE: "contentType should be a valid string",
         ERR_INVALID_DATA_TYPE_CHARSET: "charset should be a valid string",
         ERR_INVALID_DATA_TYPE_HTTP_METHOD: "allowedMethod should be array of string having item within ['GET', 'POST', 'HEAD', 'PUT', 'DELETE', 'CONNECT', 'OPTIONS', 'TRACE', 'PATCH']",

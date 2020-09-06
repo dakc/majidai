@@ -2,6 +2,7 @@
 The default config is
 
 module.exports = {
+    isDebug: false,
     contentType: "text/plain",
     charset: "utf-8",
     maxBodySize: 100 * 1024, // byte
@@ -40,6 +41,29 @@ const MSG = require("../src/constants").MSG;
 // ###########################################
 // common
 // ###########################################
+// ===========================================
+// unit testing for isDebug
+describe("test for invalid isDebug", () => {
+    it("should throw error for number", () => {
+        var config = { isDebug: 34 };
+        chai.expect(function () {
+            new majidai(config)
+        }).to.throw(MSG.ERR_INVALID_DATA_TYPE_IS_DEBUG);
+    });
+    it("should throw error for string", () => {
+        var config = { isDebug: "test" };
+        chai.expect(function () {
+            new majidai(config)
+        }).to.throw(MSG.ERR_INVALID_DATA_TYPE_IS_DEBUG);
+    });
+    it("should throw error for object", () => {
+        var config = { isDebug: [] };
+        chai.expect(function () {
+            new majidai(config)
+        }).to.throw(MSG.ERR_INVALID_DATA_TYPE_IS_DEBUG);
+    });
+});
+
 // ===========================================
 // unit testing for content-type
 describe("test for invalid content-type", () => {

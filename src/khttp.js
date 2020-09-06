@@ -32,8 +32,16 @@ class Khttp extends EventEmitter {
 
         // todo: change stdout emit type to contain info or debug type
         this._logger = {
-            info: msg => this.emit("stdout", typeof msg === "function" ? msg() : msg),
-            error: msg => this.emit("stderr", typeof msg === "function" ? msg() : msg),
+            info: msg => {
+                msg = typeof msg === "function" ? msg() : msg;
+                if (this._config.isDebug) console.log(msg);
+                this.emit("stdout", msg);
+            },
+            error: msg => {
+                msg = typeof msg === "function" ? msg() : msg;
+                if (this._config.isDebug) console.log(msg);
+                this.emit("stderr", msg);
+            },
         };
     }
 

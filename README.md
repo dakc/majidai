@@ -1,7 +1,7 @@
 # majidai
 A simple and light web framework for nodejs with less then 50KB.  
-No extra libraries are required.  
-majidai is a configuration centralized webframework.
+It does not install extra packages.  
+"majidai" is a configuration centralized webframework.
 It supports http,https and http2 protocol by default.
 
 [See here for Detail - https://dakc.github.io/majidai.html](https://dakc.github.io/majidai.html)
@@ -21,7 +21,8 @@ npm install majidai
 
 ```javascript
 const majidai = require("majidai");
-(new majidai()).start();
+const server = new majidai();
+server.start();
 ```
 open browser and access to http://your_ip_address
 
@@ -31,34 +32,37 @@ It should show following page.
 
 
 ## 3. Serve static files
+"majidai" is a configuration centralized framework. Below is a example for serving static files. Please refer to comments for each parameter to know about their function.
+
 ```javascript
 const majidai = require("majidai");
+
+// configuration
 const config = {
+    isDebug: true,  // it will show the access log and error log on console
     directoryIndex: "index.html",   // default page to display when directory is accessed
     directoryTraversal: true,       // it will list all the files if no directoryIndex was found (Default: false)
     http: {
+        port: 80, // default port to listen request
         documentRoot: '/var/www/html' // files below this directory will be accessible through web
     }
 };
+
+// pass above configuration while creating instance
 const server = new majidai(config);
 server.start();
 ```
 Put "index.html" below "documentRoot" and access to http://your_ip_address/
 
 #### Sample
-This sample shows the way to handle data sent by client.
+This sample shows the way to handle data sent by client. Refer to comments for detail information.
+
 ```javascript
 // import majidai
 const majidai = require("majidai");
 
 // create instance
-const server = new majidai();
-
-// majidai emits 2 types of events "stdout" & "stderr"
-// show the client info on console
-server.on('stdout', data => console.log(data));
-// show the error on console
-server.on('stderr', data => console.error(data));
+const server = new majidai({isDebug: true});
 
 // define POST routing at '/home'
 // param enclosed between {} can be accessed as GET parameter
@@ -97,6 +101,13 @@ Open Browser and access to access to http://your_ip_address
 - https://dakc.github.io/majidai.html
 
 ## Release information
+### Sept 6th, 2020
+* ver 2.1.2
+* added "isDebug" property to config. By default it is set to off. If this property is set "true" then, majidai will show access log and error log on console.
+```javascript
+const config = {isDebug: false}
+```
+
 ### July 27th, 2020
 * ver 2.1.0
 * added support for streaming audio and video

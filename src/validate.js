@@ -4,6 +4,10 @@ const MSG = require("./constants").MSG;
 let isValidString = r => "string" == typeof r && r.length;
 module.exports = {
     config: (r, e) => {
+        if (e.hasOwnProperty("isDebug")) {
+            if (typeof e.isDebug != "boolean") throw new TypeError(MSG.ERR_INVALID_DATA_TYPE_IS_DEBUG);
+            r.isDebug = e.isDebug
+        }
         if (e.hasOwnProperty("contentType")) {
             if (!isValidString(e.contentType)) throw new TypeError(MSG.ERR_INVALID_DATA_TYPE_CONTENT_TYPE);
             r.contentType = e.contentType
